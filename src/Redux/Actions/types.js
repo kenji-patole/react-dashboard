@@ -1,0 +1,3 @@
+export const AFF_MODAL_MENU = "AFF_MODAL_MENU";
+export const AFF_MODAL_PRODUIT = "AFF_MODAL_PRODUIT"
+
