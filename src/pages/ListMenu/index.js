@@ -45,19 +45,18 @@ const fields = [
 
 const Row = ({ index, style, data }) => {
 
-  // LIRE LES DONNÉES DU REDUCER
-  const {menu : {affModalMenu}} = useSelector(state => state) 
-  console.log(affModalMenu)
+    // LIRE LES DONNÉES DU REDUCER
+    const {menu : {affModalMenu}} = useSelector(state => state) 
+   
+    const dispatchMenu = useDispatch()
 
-  const dispatchMenu = useDispatch()
+    const { id, name, position = '', image } = data
 
-  const { id, name, position = '', image } = data
-
-  const openEdit = () => {
-    dispatchMenu(
-      affMenu({affModalMenu: !affModalMenu, data})
-  )
-  }
+    const openEdit = () => {
+      dispatchMenu(
+        affMenu({affModalMenu: !affModalMenu, data})
+      )
+    }
 
   return (
     <div key={`${id}`} style={style}>
@@ -113,8 +112,6 @@ const PageListMenu = ({listMenu}) => {
 
 const InfoChargement = ({Message, Loading}) => {
 
-  // console.log(Message, Loading)
-
   const intl = useIntl()
 
     return (
@@ -133,54 +130,18 @@ const InfoChargement = ({Message, Loading}) => {
 
 const ListMenu = () => {
 
-  const {queryMenus, queryOneMenu} = useContext(FirebaseContext)
-
-  /*const [stateMenu, dispatchMenu] = useReducer(menu);
-  console.log(stateMenu)*/
-
-  const [listMenu, setMenu] = useState([])
-  const [loading, setLoading] = useState(false)
-  
-  useEffect(() => {
-    setLoading(true)
-
-    const unsubQuery = queryMenus().onSnapshot(snapshot => {
-        console.log("snapshot type",snapshot, snapshot.type)
-
-        let tempListMenu = []
-
-        !snapshot.empty && snapshot.forEach(item => {
-
-          tempListMenu.push({id:item.id, ...item.data()})
-          
-        })
-
-        setTimeout(() => {
-          setLoading(false)
-          setMenu(tempListMenu)
-        }, 1000)
-
-    })
-
-    
-      
-
-    return () => {
-      unsubQuery()
-    }
-
-  }, [])
- 
+    const {menu: {listMenus, loadingMenu}} = useSelector(state => state) 
+    console.log(listMenus)
 
   return (
     
     <Fragment>
       <EditModal/>
 
-      {!loading && listMenu.length>0 ? <PageListMenu listMenu={listMenu}/> :
+      {!loadingMenu && listMenus.length>0 ? <PageListMenu listMenu={listMenus}/> :
           <InfoChargement 
             Message="Loading"
-            Loading={loading}
+            Loading={loadingMenu}
           />
       }
      

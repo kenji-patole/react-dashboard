@@ -121,13 +121,13 @@ const EditModal = () => {
     return (
         <div>
             <SpeedDial
-            ariaLabel="SpeedDial example"
-            className={classes.speedDial}
-            hidden={affModalMenu}
-            icon={<SpeedDialIcon />}
-            open={false}
-            direction={"up"}
-            onClick={handleClickOpen}
+                ariaLabel="SpeedDial example"
+                className={classes.speedDial}
+                hidden={affModalMenu}
+                icon={<SpeedDialIcon />}
+                open={false}
+                direction={"up"}
+                onClick={handleClickOpen}
             />
             
         

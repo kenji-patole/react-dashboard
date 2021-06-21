@@ -52,53 +52,34 @@ const EditModalProduit = () => {
     let id = '';
     let name ='';
     let price = '';
+    let menuId = '';
     
     // LIRE LES DONNÉES DU REDUCER
-    const {produit : {affModalProduit, data}} = useSelector(state => state) 
+    const {produit, menu} = useSelector(state => state) 
+
+    const {affModalProduit, data} = produit ;
+    const {listMenus} = menu ;
+
         console.log(affModalProduit, data)
     
-    const [dataMenu, setDataMenu] = useState(null)
-    
-        useEffect(() => {
-            queryMenus().get().then(snapshot => {
-            
-                let  dataMenus = snapshot.docs.map(menu => {
-                    return (
-                        {id: menu.id, ...menu.data()}
-                    )
-                })
-        
-                setDataMenu(dataMenus)
-        
-                //console.log(dataMenu)
-            })
-            
-            return () => {
-                
-            }
-        }, [])
 
     if (data !== null) {
         id = data.id
         name = data.name
         price = data.price
+        menuId = data?.menu
     }
     
 
     const dispatchProduit = useDispatch()
 
 
-    const {queryOneProduit, queryProduit, queryMenus} = useContext(FirebaseContext);
+    const {queryOneProduit, queryProduit} = useContext(FirebaseContext);
     
-
-    
-
-    
-    const [open, setOpen] = React.useState(false);
     //const [openSpeed, setOpenSpeed] = React.useState(false)
     const [valueName, setValueName] = useState(name)
     const [valuePrice, setValuePrice] = useState(price)
-    
+    const [valueSelect, setValueSelect] = useState(menuId)
 
     
     const handleClickOpen = () => {
@@ -128,25 +109,46 @@ const EditModalProduit = () => {
         console.log(e.target.value)
     }
 
+    const handleSelectMenu = (e) => {
+        (e.target.value != undefined) && setValueSelect(e.target.value)
+
+        console.log(e.target.value)
+    }
+
+
     const save = () => {
 
-        if (data != null ) {
-            queryOneProduit(id).update({name:valueName, 
-                price:parseInt(valuePrice)}) 
+        console.log({
+            image:'nc',
+            name: valueName,
+            price: valuePrice,
+            menu: valueSelect
+        })
+
+        /*if (data != null ) {
+            queryOneProduit(id).update({
+                name:valueName, 
+                price:parseInt(valuePrice), 
+                menu: valueSelect
+            }) 
 
         } else {
             queryProduit().add({
                 image:'nc',
                 name: valueName,
-                price: valuePrice
+                price: valuePrice,
+                menu: valueSelect
             })
         }
-        
+        */
         handleClose()
        
 
         console.log("save", id, valueName, valuePrice)
     }
+
+  
+
 
     return (
         <div>
@@ -187,8 +189,9 @@ const EditModalProduit = () => {
                     labelId="demo-controlled-open-select-label"
                     id="demo-controlled-open-select"
                     fullWidth
+                    onChange={handleSelectMenu}
                 >
-                   {(dataMenu != null) && dataMenu.map(item => (<MenuItem key={item.id} value={item.id}>
+                   {(listMenus.length>0) && listMenus.map(item => (<MenuItem key={item.id} value={item.id}>
                         <em>{item.name}</em>
                     </MenuItem>))}
     
